@@ -78,6 +78,7 @@ class thread_pool {
 public:
     explicit thread_pool(size_t thread_count) :
             done(false), joiner(threads) {
+        threads.reserve(thread_count);
         try {
             for (unsigned i = 0; i < thread_count; ++i) {
                 threads.emplace_back(&thread_pool::worker_thread, this);
