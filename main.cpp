@@ -120,7 +120,13 @@ int main(int argc, char *argv[]) {
 
     auto start_time_point = time_functions::get_current_time_fenced();
 
-    auto res = std::make_tuple(0, 0, 0);
+    auto res = integrals::calculate_integral(thread_count, points_count, functions[function_number - 1], config["abs_err"],
+                                                            config["rel_err"],
+                                                            config["x_start"],
+                                                            config["x_end"],
+                                                            config["y_start"], config["y_end"],
+                                                            (size_t) config["init_steps_x"],
+                                                            (size_t) config["init_steps_y"], (size_t) config["max_iter"]);
 
     auto end_time_point = time_functions::get_current_time_fenced();
     auto dur = end_time_point - start_time_point;

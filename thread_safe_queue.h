@@ -66,8 +66,4 @@ public:
     }
 };
 
-int main() {
-    thread_safe_queue<int> rq;
-}
-
 #endif //LAB5_THREAD_SAFE_QUEUE_H
