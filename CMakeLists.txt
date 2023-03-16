@@ -7,7 +7,8 @@ cmake_minimum_required(VERSION 3.15)
 set(PROJECT_NAME template)
 project(${PROJECT_NAME} C CXX) # project(${PROJECT_NAME} C CXX ASM)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ##########################################################
 # User configurable options of the template
@@ -55,11 +56,11 @@ include(cmake/CompilerWarnings.cmake)
 ##########################################################
 
 #! Project main executable source compilation
-add_executable(${PROJECT_NAME} main.cpp thread_pool.h thread_safe_queue.h)
+add_executable(${PROJECT_NAME} main.cpp thread_pool.h thread_safe_queue.h config_manager.h config_manager.cpp functions.cpp functions.h integrals.h integrals.cpp)
 
 
 #! Put path to your project headers
-target_include_directories(${PROJECT_NAME} PRIVATE options_parser)
+#target_include_directories(${PROJECT_NAME} PRIVATE options_parser)
 
 #! Add external packages
 # options_parser requires boost::program_options library

@@ -1,23 +1,61 @@
-//
-// Created by Naz on 3/15/2023.
-//
-
-#ifndef LAB5_THREAD_POOL_H
-#define LAB5_THREAD_POOL_H
-
+#include <deque>
+#include <future>
+#include <memory>
+#include <functional>
+#include <iostream>
+#include <atomic>
 #include <thread>
 #include <vector>
-#include <atomic>
-#include <functional>
 #include "thread_safe_queue.h"
 
 struct join_threads {
-    join_threads(std::vector<std::thread> &) {}
+    explicit join_threads(std::vector<std::thread> &) {}
+};
+
+class function_wrapper {
+    struct impl_base {
+        virtual void call() = 0;
+
+        virtual ~impl_base() = default;
+    };
+
+    std::unique_ptr<impl_base> impl;
+
+    template<typename F>
+    struct impl_type : impl_base {
+        F f;
+
+        explicit impl_type(F &&f_) : f(std::move(f_)) {}
+
+        void call() override { f(); }
+    };
+
+public:
+    template<typename F>
+    explicit function_wrapper(F &&f):
+            impl(new impl_type<F>(std::forward<F>(f))) {}
+
+    void call() { impl->call(); }
+
+    function_wrapper(function_wrapper &&other) noexcept:
+            impl(std::move(other.impl)) {}
+
+    function_wrapper &operator=(function_wrapper &&other)
+    noexcept {
+        impl = std::move(other.impl);
+        return *this;
+    }
+
+    function_wrapper(const function_wrapper &) = delete;
+
+    function_wrapper(function_wrapper &) = delete;
+
+    function_wrapper &operator=(const function_wrapper &) = delete;
 };
 
 class thread_pool {
     std::atomic_bool done;
-    thread_safe_queue <std::function<void()>> work_queue;
+    thread_safe_queue<std::function<void()> > work_queue;
     std::vector<std::thread> threads;
     join_threads joiner;
 
@@ -33,9 +71,8 @@ class thread_pool {
     }
 
 public:
-    thread_pool() :
+    explicit thread_pool(size_t thread_count) :
             done(false), joiner(threads) {
-        unsigned const thread_count = std::thread::hardware_concurrency();
         try {
             for (unsigned i = 0; i < thread_count; ++i) {
                 threads.emplace_back(&thread_pool::worker_thread, this);
@@ -52,9 +89,14 @@ public:
     }
 
     template<typename FunctionType>
-    void submit(FunctionType f) {
-        work_queue.push(std::function<void()>(f));
-    }
-};
+    std::future<typename std::result_of<FunctionType()>::type>
+    submit(FunctionType f) {
+        typedef typename std::result_of<FunctionType()>::type result_type;
 
-#endif //LAB5_THREAD_POOL_H
+        std::packaged_task<result_type()> task(std::move(f));
+        std::future<result_type> res(task.get_future());
+        work_queue.push(std::move(task));
+        return res;
+    }
+    // rest as before
+};
