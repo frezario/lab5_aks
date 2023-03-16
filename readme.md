@@ -52,12 +52,7 @@ We've made an alternative to previous integral computating program using thread-
 
 #### Determination of the optimal number of points
 
-This results for case when max iteration in config file is 7 and with 4 threads.
-
-![100-1000](https://user-images.githubusercontent.com/92572643/224485078-f0a7e0c3-b94c-4c86-8005-9ca3778030f6.png)
-![10-200](https://user-images.githubusercontent.com/92572643/224485137-b4d9d89c-288a-4304-86c5-033c1edc1cf4.png)
-
-The second graph is unstable and all time values are similar, so we took 50 points as the optimal amount. It should be noted that the size of the interval per thread directly depends on the maximum iterations in config file, as the number of intervals increases with each iteration.
+We took the optimal value of 100 from previous lab 
 
 #### Compare with and without queue
 
