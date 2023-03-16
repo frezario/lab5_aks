@@ -1,7 +1,9 @@
 # Lab work 4: Parallelization using Thread Pool.
 
 Authors (team): 
+
 Demchuk Nazar: https://github.com/frezario
+
 Oleksiuk Liubomyr: https://github.com/Liubavaa
 
 ### Prerequisites
