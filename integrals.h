@@ -257,12 +257,46 @@ namespace integrals {
         auto i_height = sizes.first;
         auto i_width = sizes.second;
 
+        size_t counter = 0;
+
         if (i_height == 0) {
             std::cerr << "Error: Unable to split the region into the intervals with " << pts_per_interval << " points per interval" << std::endl;
             exit(7);
         }
 
-        auto pool = thread_pool()
+        auto pool = thread_pool(thread_count);
+
+        do {
+            if (counter != 0) {
+                sizes = get_interval_size(pts_per_interval, steps_x, steps_y);
+                i_height = sizes.first;
+                i_width = sizes.second;
+            }
+            first_riemann_sum = second_riemann_sum;
+            second_riemann_sum = 0;
+            auto delta_x = (x_end - x_start) / (double) steps_x;
+            auto delta_y = (y_end - y_start) / (double) steps_y;
+
+            // creating intervals to give consumers
+            size_t num_of_intervals = 0;
+            for (size_t step_y = 0; step_y < steps_y; step_y += i_height) {
+                for (size_t step_x = 0; step_x < steps_x; step_x += i_width) {
+                    auto width = std::min(i_width, steps_x - step_x);
+                    auto height = std::min(i_height, steps_y - step_y);
+                    auto i = Interval{x_start + (double)step_x * delta_x, y_start + (double)step_y * delta_y, delta_x, delta_y, width, height};
+                    num_of_intervals++;
+                    second_riemann_sum += pool.submit(std::bind(&calculate_riemann_sum, std::move(function), i)).get();
+                }
+            }
+
+            second_riemann_sum *= delta_x * delta_y;
+
+            steps_x *= 2;
+            steps_y *= 2;
+            counter++;
+        } while ((fabs(second_riemann_sum - first_riemann_sum) > abs_err ||
+                  fabs((second_riemann_sum - first_riemann_sum) / second_riemann_sum) > rel_err) &&
+                 counter <= max_iter);
 
 
     }
