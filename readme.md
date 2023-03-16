@@ -1,44 +1,72 @@
-<mark>Template for your README. Remove all unused parts and instructions</mark>
+# Lab work 4: Parallelization using Thread Pool.
 
-# Lab work <mark>NUMBER</mark>: <mark>SHORT TOPIC</mark>
-Authors (team): <mark>AUTHORS WITH GITHUB LINKS</mark><br>
-Variant: <mark>VARIANT SHOULD BE HERE</mark>
-## Prerequisites
+Authors (team): 
+Demchuk Nazar: https://github.com/frezario
+Oleksiuk Liubomyr: https://github.com/Liubavaa
 
-<mark>LIST LIBRARIES/TOOLS/OTHER UTILITIES THAT NEED TO BE INSTALLED (E.G. GCC, OPENMP, CMAKE ETC)</mark>
+### Prerequisites
+
+C/C++ compiler, CMake, python3
 
 ### Compilation
 
-<mark>HOW TO COMPILE YOUR PROGRAM? (RECOMMENDED: ./comile.sh)</mark>
-
-### Installation
-
-<mark>DESCRIBE THE INSTALLATION PROCESS (USE ./dependencies FOLDER)</mark>
-
-<mark>Note: For Python scripts, You must add `requirenments.txt` 
-file and add your env to the `.gitignore` file!</mark>
+```
+./compile.sh --no-debug-build --optimize-build
+```
 
 ### Usage
 
-<mark>PROVIDE AN EXAMPLE OF HOW TO RUN YOUR PROGRAM (IT CAN BE A_flag COMMAND LINE WITH INPUT AND EXPECTED OUTPUT)</mark>
+To run a script:
+- that show the graph of points and time:
+```
+python3 estimate_points.py
+```
+- that show the graph of times with and without thread pool:
+```
+python3 plot.py
+```
+- that show the graph with acceleration:
 
-<mark>Note: if your project needs or generates any data, media and so on -- put them
-into the data folder</mark> 
+```
+python3 acceleration.py
+```
+To run the c++ program, compile it and run as:
+
+```
+./compile.sh --no-debug-build --optimize-build
+cd bin
+./integrate_parallel_queue
+```
+
 
 ### Important!
 
-<mark>WHAT ELSE SHOULD WE KNOW ABOUT YOUR WORK? (E.G. KNOWN ISSUES, BUGS, SPECIAL BEHAVIOR ETC)</mark>
+To write a clean code, we've made a strong assumption that user will chose only those amount of points per interval, which is reasonable to build a rectangle interval with. That's because in the opposite case the computations used to determine the size of each subinterval become too complex and boilerplate. Also, the subintervals would be of different size and in some cases will be unrepresantable as rectangles.
 
 ### Results
 
-<mark>DESCRIBE THE RESULTS OF THE WORK YOU DID. WHAT DID YOU LEARN OR FIND INTERESTING?</mark>
+We've made an alternative to prvious integral computating program using thread-safe queue. Although, the result is not better than previous one, we've learned another good general way to parallelize computations.
 
-# Additional tasks
-<mark>IF APPLICABLE, LIST ALL THE EXTRA FEATURES YOU ADDED. PROVIDE DETAILS<mark>
+#### Determination of the optimal number of points
 
-# ATTENTION!
-  
-Additional tasks not listed in the previous paragraph would not be graded.
+This results for case when max iteration in config file is 7 and with 4 threads.
 
-Be sure to provide a complete list of authors.
+![100-1000](https://user-images.githubusercontent.com/92572643/224485078-f0a7e0c3-b94c-4c86-8005-9ca3778030f6.png)
+![10-200](https://user-images.githubusercontent.com/92572643/224485137-b4d9d89c-288a-4304-86c5-033c1edc1cf4.png)
 
+The second graph is unstable and all time values are similar, so we took 50 points as the optimal amount. It should be noted that the size of the interval per thread directly depends on the maximum iterations in config file, as the number of intervals increases with each iteration.
+
+#### Compare with and without queue
+
+We used determined number of points to compare programs with and without queue.
+
+![compare_min](https://user-images.githubusercontent.com/92572643/224485416-4c0114b6-4e3f-40f7-be55-5a93cebca095.png)
+![compare_avg](https://user-images.githubusercontent.com/92572643/224485426-522260eb-64e2-4420-a88b-ad68065c0bb7.png)
+
+Here also, as we take small number of points, script with queue works faster with more threads.
+
+#### Acceleration of parallelization
+
+![acceleration](https://user-images.githubusercontent.com/92572643/224486170-35c4c187-68fc-4c04-96b8-1cbfeab6d749.png)
+
+As $n$ - the number of threads increase, the coefficient decreases due to dividing the function by $n$.
