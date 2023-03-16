@@ -52,11 +52,9 @@ We've made an alternative to previous integral computating program using thread-
 
 #### Determination of the optimal number of points
 
-We took the optimal value of 100 from previous lab 
+We took the optimal value of 100 from previous lab .
 
-#### Compare with and without queue
-
-We used determined number of points to compare programs with and without thread pool.
+#### Compare with and without thread pool
 
 ![image](https://user-images.githubusercontent.com/91615650/225736115-085bc1f4-d81e-4166-ba73-e08efc6b448d.png)
 
