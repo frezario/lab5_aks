@@ -63,8 +63,8 @@ The second graph is unstable and all time values are similar, so we took 50 poin
 
 We used determined number of points to compare programs with and without queue.
 
-![compare_min](https://user-images.githubusercontent.com/92572643/224485416-4c0114b6-4e3f-40f7-be55-5a93cebca095.png)
-![compare_avg](https://user-images.githubusercontent.com/92572643/224485426-522260eb-64e2-4420-a88b-ad68065c0bb7.png)
+![image](https://user-images.githubusercontent.com/92572643/225735051-8024461a-0646-4f3c-97bd-20e848c107e8.png)
+![image](https://user-images.githubusercontent.com/92572643/225735111-f1548c07-c95d-4a71-9a47-1a459baca7d8.png)
 
 Here also, as we take small number of points, script with queue works faster with more threads.
 
