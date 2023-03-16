@@ -8,7 +8,13 @@ set(PROJECT_NAME template)
 project(${PROJECT_NAME} C CXX) # project(${PROJECT_NAME} C CXX ASM)
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
+add_executable(${PROJECT_NAME} main.cpp thread_pool.h thread_safe_queue.h config_manager.h config_manager.cpp functions.cpp functions.h integrals.h integrals.cpp)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
 
 ##########################################################
 # User configurable options of the template
@@ -55,20 +61,7 @@ include(cmake/CompilerWarnings.cmake)
 # Project files, packages, libraries and so on
 ##########################################################
 
-#! Project main executable source compilation
-add_executable(${PROJECT_NAME} main.cpp thread_pool.h thread_safe_queue.h config_manager.h config_manager.cpp functions.cpp functions.h integrals.h integrals.cpp)
 
-
-#! Put path to your project headers
-#target_include_directories(${PROJECT_NAME} PRIVATE options_parser)
-
-#! Add external packages
-# options_parser requires boost::program_options library
-#find_package(Boost 1.71.0 COMPONENTS program_options system REQUIRED)
-#target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIR})
-#target_link_libraries(${PROJECT_NAME} Boost::program_options Boost::system)
-
-						
 ##########################################################
 # Fixed CMakeLists.txt part 
 ##########################################################
