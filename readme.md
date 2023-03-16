@@ -34,10 +34,9 @@ To run the c++ program, compile it and run as:
 
 ```
 ./compile.sh --no-debug-build --optimize-build
-cd bin
-./integrate_parallel_queue
+ cd cmake-build-release/
+./integrate_parallel_tpool ../func1.cfg 1 4 100
 ```
-
 
 ### Important!
 
