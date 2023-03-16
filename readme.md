@@ -56,12 +56,13 @@ We took the optimal value of 100 from previous lab
 
 #### Compare with and without queue
 
-We used determined number of points to compare programs with and without queue.
+We used determined number of points to compare programs with and without thread pool.
 
-![image](https://user-images.githubusercontent.com/92572643/225735051-8024461a-0646-4f3c-97bd-20e848c107e8.png)
-![image](https://user-images.githubusercontent.com/92572643/225735111-f1548c07-c95d-4a71-9a47-1a459baca7d8.png)
+![image](https://user-images.githubusercontent.com/91615650/225736115-085bc1f4-d81e-4166-ba73-e08efc6b448d.png)
 
-Here also, as we take small number of points, script with queue works faster with more threads.
+![image](https://user-images.githubusercontent.com/91615650/225736149-8e41c20a-61d6-4c48-9196-3172729c6fe3.png)
+
+Here also, as we take the small number of points, script with queue works faster with more threads.
 
 #### Acceleration of parallelization
 
